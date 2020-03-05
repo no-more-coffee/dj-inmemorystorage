@@ -1,14 +1,14 @@
-from io import StringIO, BytesIO
 import os
+from io import StringIO, BytesIO
+
 try:
     from urlparse import urljoin
 except ImportError:
     from urllib.parse import urljoin
 
-
 from django.conf import settings
-from django.core.files.storage import Storage
 from django.core.files.base import File
+
 try:
     from django.utils.encoding import filepath_to_uri, force_bytes
 except ImportError:
@@ -17,7 +17,6 @@ except ImportError:
 import six
 
 from django.core.files.storage import Storage
-from django.core.files.base import ContentFile
 from django.utils.encoding import filepath_to_uri
 from django.utils import timezone
 from six.moves.urllib.parse import urljoin
@@ -44,13 +43,13 @@ class InMemoryFile(InMemoryNode, File):
     to ContentFile, except that self.size works even after data has been written to it
     """
     def __init__(self, content='', parent=None, name=None):
-        #init InMemoryNode
+        # init InMemoryNode
         self.parent = parent
         self.created_at = timezone.now()
         self.last_modified = timezone.now()
         self.last_accessed = timezone.now()
 
-        #init File
+        # init File
         if six.PY3:
             stream_class = StringIO if isinstance(content, six.text_type) else BytesIO
         else:
@@ -64,7 +63,7 @@ class InMemoryFile(InMemoryNode, File):
     def __bool__(self):
         return True
 
-    def __nonzero__(self):      # Python 2 compatibility
+    def __nonzero__(self):  # Python 2 compatibility
         return type(self).__bool__(self)
 
     @property
